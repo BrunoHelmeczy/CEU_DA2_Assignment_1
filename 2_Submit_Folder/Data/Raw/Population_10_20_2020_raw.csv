@@ -1,0 +1,265 @@
+"","iso2c","country","SP.POP.TOTL","year"
+"1","1A","Arab World",427870270,2019
+"2","S3","Caribbean small states",7401381,2019
+"3","B8","Central Europe and the Baltics",102378579,2019
+"4","V2","Early-demographic dividend",3290290622,2019
+"5","Z4","East Asia & Pacific",2340628292,2019
+"6","4E","East Asia & Pacific (excluding high income)",2093675040,2019
+"7","T4","East Asia & Pacific (IDA & IBRD countries)",2067984156,2019
+"8","XC","Euro area",342597698,2019
+"9","Z7","Europe & Central Asia",921140092,2019
+"10","7E","Europe & Central Asia (excluding high income)",399404587,2019
+"11","T7","Europe & Central Asia (IDA & IBRD countries)",460799505,2019
+"12","EU","European Union",447512041,2019
+"13","F1","Fragile and conflict affected situations",798138587,2019
+"14","XE","Heavily indebted poor countries (HIPC)",801708035,2019
+"15","XD","High income",1235852827,2019
+"16","XF","IBRD only",4816235951,2019
+"17","ZT","IDA & IBRD total",6486934851,2019
+"18","XH","IDA blend",561572202,2019
+"19","XI","IDA only",1109126698,2019
+"20","XG","IDA total",1670698900,2019
+"21","V3","Late-demographic dividend",2298470832,2019
+"22","ZJ","Latin America & Caribbean",646430841,2019
+"23","XJ","Latin America & Caribbean (excluding high income)",613773128,2019
+"24","T2","Latin America & the Caribbean (IDA & IBRD countries)",630644770,2019
+"25","XL","Least developed countries: UN classification",1033388876,2019
+"26","XO","Low & middle income",6437681145,2019
+"27","XM","Low income",668454965,2019
+"28","XN","Lower middle income",2913363391,2019
+"29","ZQ","Middle East & North Africa",456707404,2019
+"30","XQ","Middle East & North Africa (excluding high income)",389457086,2019
+"31","T3","Middle East & North Africa (IDA & IBRD countries)",384771780,2019
+"32","XP","Middle income",5769226180,2019
+"33","XU","North America",365892703,2019
+"34","XY","Not classified",NA,2019
+"35","OE","OECD members",1359963500,2019
+"36","S4","Other small states",31360407,2019
+"37","S2","Pacific island small states",2493696,2019
+"38","V4","Post-demographic dividend",1112914457,2019
+"39","V1","Pre-demographic dividend",944902749,2019
+"40","S1","Small states",41255484,2019
+"41","8S","South Asia",1835776742,2019
+"42","T5","South Asia (IDA & IBRD)",1835776742,2019
+"43","ZG","Sub-Saharan Africa",1106957898,2019
+"44","ZF","Sub-Saharan Africa (excluding high income)",1105594562,2019
+"45","T6","Sub-Saharan Africa (IDA & IBRD countries)",1106957898,2019
+"46","XT","Upper middle income",2855862789,2019
+"47","1W","World",7673533972,2019
+"48","AF","Afghanistan",38041754,2019
+"49","AL","Albania",2854191,2019
+"50","DZ","Algeria",43053054,2019
+"51","AS","American Samoa",55312,2019
+"52","AD","Andorra",77142,2019
+"53","AO","Angola",31825295,2019
+"54","AG","Antigua and Barbuda",97118,2019
+"55","AR","Argentina",44938712,2019
+"56","AM","Armenia",2957731,2019
+"57","AW","Aruba",106314,2019
+"58","AU","Australia",25364307,2019
+"59","AT","Austria",8877067,2019
+"60","AZ","Azerbaijan",10023318,2019
+"61","BS","Bahamas, The",389482,2019
+"62","BH","Bahrain",1641172,2019
+"63","BD","Bangladesh",163046161,2019
+"64","BB","Barbados",287025,2019
+"65","BY","Belarus",9466856,2019
+"66","BE","Belgium",11484055,2019
+"67","BZ","Belize",390353,2019
+"68","BJ","Benin",11801151,2019
+"69","BM","Bermuda",63918,2019
+"70","BT","Bhutan",763092,2019
+"71","BO","Bolivia",11513100,2019
+"72","BA","Bosnia and Herzegovina",3301000,2019
+"73","BW","Botswana",2303697,2019
+"74","BR","Brazil",211049527,2019
+"75","VG","British Virgin Islands",30030,2019
+"76","BN","Brunei Darussalam",433285,2019
+"77","BG","Bulgaria",6975761,2019
+"78","BF","Burkina Faso",20321378,2019
+"79","BI","Burundi",11530580,2019
+"80","CV","Cabo Verde",549935,2019
+"81","KH","Cambodia",16486542,2019
+"82","CM","Cameroon",25876380,2019
+"83","CA","Canada",37589262,2019
+"84","KY","Cayman Islands",64948,2019
+"85","CF","Central African Republic",4745185,2019
+"86","TD","Chad",15946876,2019
+"87","JG","Channel Islands",172259,2019
+"88","CL","Chile",18952038,2019
+"89","CN","China",1397715000,2019
+"90","CO","Colombia",50339443,2019
+"91","KM","Comoros",850886,2019
+"92","CD","Congo, Dem. Rep.",86790567,2019
+"93","CG","Congo, Rep.",5380508,2019
+"94","CR","Costa Rica",5047561,2019
+"95","CI","Cote d'Ivoire",25716544,2019
+"96","HR","Croatia",4067500,2019
+"97","CU","Cuba",11333483,2019
+"98","CW","Curacao",157538,2019
+"99","CY","Cyprus",1198575,2019
+"100","CZ","Czech Republic",10669709,2019
+"101","DK","Denmark",5818553,2019
+"102","DJ","Djibouti",973560,2019
+"103","DM","Dominica",71808,2019
+"104","DO","Dominican Republic",10738958,2019
+"105","EC","Ecuador",17373662,2019
+"106","EG","Egypt, Arab Rep.",100388073,2019
+"107","SV","El Salvador",6453553,2019
+"108","GQ","Equatorial Guinea",1355986,2019
+"109","ER","Eritrea",NA,2019
+"110","EE","Estonia",1326590,2019
+"111","SZ","Eswatini",1148130,2019
+"112","ET","Ethiopia",112078730,2019
+"113","FO","Faroe Islands",48678,2019
+"114","FJ","Fiji",889953,2019
+"115","FI","Finland",5520314,2019
+"116","FR","France",67059887,2019
+"117","PF","French Polynesia",279287,2019
+"118","GA","Gabon",2172579,2019
+"119","GM","Gambia, The",2347706,2019
+"120","GE","Georgia",3720382,2019
+"121","DE","Germany",83132799,2019
+"122","GH","Ghana",30417856,2019
+"123","GI","Gibraltar",33701,2019
+"124","GR","Greece",10716322,2019
+"125","GL","Greenland",56225,2019
+"126","GD","Grenada",112003,2019
+"127","GU","Guam",167294,2019
+"128","GT","Guatemala",16604026,2019
+"129","GN","Guinea",12771246,2019
+"130","GW","Guinea-Bissau",1920922,2019
+"131","GY","Guyana",782766,2019
+"132","HT","Haiti",11263077,2019
+"133","HN","Honduras",9746117,2019
+"134","HK","Hong Kong SAR, China",7507400,2019
+"135","HU","Hungary",9769949,2019
+"136","IS","Iceland",361313,2019
+"137","IN","India",1366417754,2019
+"138","ID","Indonesia",270625568,2019
+"139","IR","Iran, Islamic Rep.",82913906,2019
+"140","IQ","Iraq",39309783,2019
+"141","IE","Ireland",4941444,2019
+"142","IM","Isle of Man",84584,2019
+"143","IL","Israel",9053300,2019
+"144","IT","Italy",60297396,2019
+"145","JM","Jamaica",2948279,2019
+"146","JP","Japan",126264931,2019
+"147","JO","Jordan",10101694,2019
+"148","KZ","Kazakhstan",18513930,2019
+"149","KE","Kenya",52573973,2019
+"150","KI","Kiribati",117606,2019
+"151","KP","Korea, Dem. People’s Rep.",25666161,2019
+"152","KR","Korea, Rep.",51709098,2019
+"153","XK","Kosovo",1794248,2019
+"154","KW","Kuwait",4207083,2019
+"155","KG","Kyrgyz Republic",6456900,2019
+"156","LA","Lao PDR",7169455,2019
+"157","LV","Latvia",1912789,2019
+"158","LB","Lebanon",6855713,2019
+"159","LS","Lesotho",2125268,2019
+"160","LR","Liberia",4937374,2019
+"161","LY","Libya",6777452,2019
+"162","LI","Liechtenstein",38019,2019
+"163","LT","Lithuania",2786844,2019
+"164","LU","Luxembourg",619896,2019
+"165","MO","Macao SAR, China",640445,2019
+"166","MG","Madagascar",26969307,2019
+"167","MW","Malawi",18628747,2019
+"168","MY","Malaysia",31949777,2019
+"169","MV","Maldives",530953,2019
+"170","ML","Mali",19658031,2019
+"171","MT","Malta",502653,2019
+"172","MH","Marshall Islands",58791,2019
+"173","MR","Mauritania",4525696,2019
+"174","MU","Mauritius",1265711,2019
+"175","MX","Mexico",127575529,2019
+"176","FM","Micronesia, Fed. Sts.",113815,2019
+"177","MD","Moldova",2657637,2019
+"178","MC","Monaco",38964,2019
+"179","MN","Mongolia",3225167,2019
+"180","ME","Montenegro",622137,2019
+"181","MA","Morocco",36471769,2019
+"182","MZ","Mozambique",30366036,2019
+"183","MM","Myanmar",54045420,2019
+"184","NA","Namibia",2494530,2019
+"185","NR","Nauru",12581,2019
+"186","NP","Nepal",28608710,2019
+"187","NL","Netherlands",17332850,2019
+"188","NC","New Caledonia",287800,2019
+"189","NZ","New Zealand",4917000,2019
+"190","NI","Nicaragua",6545502,2019
+"191","NE","Niger",23310715,2019
+"192","NG","Nigeria",200963599,2019
+"193","MK","North Macedonia",2083459,2019
+"194","MP","Northern Mariana Islands",57216,2019
+"195","NO","Norway",5347896,2019
+"196","OM","Oman",4974986,2019
+"197","PK","Pakistan",216565318,2019
+"198","PW","Palau",18008,2019
+"199","PA","Panama",4246439,2019
+"200","PG","Papua New Guinea",8776109,2019
+"201","PY","Paraguay",7044636,2019
+"202","PE","Peru",32510453,2019
+"203","PH","Philippines",108116615,2019
+"204","PL","Poland",37970874,2019
+"205","PT","Portugal",10269417,2019
+"206","PR","Puerto Rico",3193694,2019
+"207","QA","Qatar",2832067,2019
+"208","RO","Romania",19356544,2019
+"209","RU","Russian Federation",144373535,2019
+"210","RW","Rwanda",12626950,2019
+"211","WS","Samoa",197097,2019
+"212","SM","San Marino",33860,2019
+"213","ST","Sao Tome and Principe",215056,2019
+"214","SA","Saudi Arabia",34268528,2019
+"215","SN","Senegal",16296364,2019
+"216","RS","Serbia",6944975,2019
+"217","SC","Seychelles",97625,2019
+"218","SL","Sierra Leone",7813215,2019
+"219","SG","Singapore",5703569,2019
+"220","SX","Sint Maarten (Dutch part)",40733,2019
+"221","SK","Slovak Republic",5454073,2019
+"222","SI","Slovenia",2087946,2019
+"223","SB","Solomon Islands",669823,2019
+"224","SO","Somalia",15442905,2019
+"225","ZA","South Africa",58558270,2019
+"226","SS","South Sudan",11062113,2019
+"227","ES","Spain",47076781,2019
+"228","LK","Sri Lanka",21803000,2019
+"229","KN","St. Kitts and Nevis",52823,2019
+"230","LC","St. Lucia",182790,2019
+"231","MF","St. Martin (French part)",38002,2019
+"232","VC","St. Vincent and the Grenadines",110589,2019
+"233","SD","Sudan",42813238,2019
+"234","SR","Suriname",581372,2019
+"235","SE","Sweden",10285453,2019
+"236","CH","Switzerland",8574832,2019
+"237","SY","Syrian Arab Republic",17070135,2019
+"238","TJ","Tajikistan",9321018,2019
+"239","TZ","Tanzania",58005463,2019
+"240","TH","Thailand",69625582,2019
+"241","TL","Timor-Leste",1293119,2019
+"242","TG","Togo",8082366,2019
+"243","TO","Tonga",104494,2019
+"244","TT","Trinidad and Tobago",1394973,2019
+"245","TN","Tunisia",11694719,2019
+"246","TR","Turkey",83429615,2019
+"247","TM","Turkmenistan",5942089,2019
+"248","TC","Turks and Caicos Islands",38191,2019
+"249","TV","Tuvalu",11646,2019
+"250","UG","Uganda",44269594,2019
+"251","UA","Ukraine",44385155,2019
+"252","AE","United Arab Emirates",9770529,2019
+"253","GB","United Kingdom",66834405,2019
+"254","US","United States",328239523,2019
+"255","UY","Uruguay",3461734,2019
+"256","UZ","Uzbekistan",33580650,2019
+"257","VU","Vanuatu",299882,2019
+"258","VE","Venezuela, RB",28515829,2019
+"259","VN","Vietnam",96462106,2019
+"260","VI","Virgin Islands (U.S.)",106631,2019
+"261","PS","West Bank and Gaza",4685306,2019
+"262","YE","Yemen, Rep.",29161922,2019
+"263","ZM","Zambia",17861030,2019
+"264","ZW","Zimbabwe",14645468,2019
