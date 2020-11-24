@@ -42,7 +42,7 @@ PopCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/
                                                        Death     = Death,
                                                        Recovered = Recovered,
                                                        Active    = Active)
-    
+
 #### Clean WDI population data ####
       ## Check the observations:
   
@@ -129,10 +129,18 @@ df <- full_join(Covid_raw_grouped,Pop_raw, by = c("Country" = "Country"))
   View( df %>% filter( !complete.cases(df) ) )
 # Drop if population, confirmed cases or death is missing
   df <- df %>% filter( !( is.na( Population ) | is.na( Confirmed ) | is.na( Death ) ))
-  
+# Add 1 to Death / Recovered / Active to enable log transformations
+    # Deaths: 12x 0s / Recovered: 3x 0s / Active: 2x 0s
+
+  df <- df %>% transmute( Confirmed   = Confirmed/1000,
+                          Death       = (Death + 1)/1000,
+                          Recovered   = (Recovered +1)/1000,
+                          Active      = (Active +1)/1000,
+                          Population  = Population/1000000)    
+  summary(df)
   
 # Save clean data
-getwd()
+
 write.csv( df , 'covid_pop_10_20_2020_clean.csv')
   
   
