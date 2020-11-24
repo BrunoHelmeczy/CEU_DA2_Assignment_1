@@ -31,10 +31,10 @@ PopCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/
   
 # Create new data table with 1 observation per country
   Covid_raw_grouped <- Covid_raw %>% group_by(Country_Region) %>% 
-    summarise(Confirmed   = sum(Confirmed),
-              Death       = sum(Deaths),
-              Recovered   = sum(Recovered),
-              Active      = sum(Active))
+    summarise(Confirmed   = sum(Confirmed, na.rm = T),
+              Death       = sum(Deaths, na.rm = T),
+              Recovered   = sum(Recovered, na.rm = T),
+              Active      = sum(Active, na.rm = T))
     
 # Re-Summarize data table - Rename Country column
   Covid_raw_grouped <- Covid_raw_grouped %>% summarise(Country   = Country_Region,
@@ -42,7 +42,7 @@ PopCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/
                                                        Death     = Death,
                                                        Recovered = Recovered,
                                                        Active    = Active)
-
+  View(Covid_raw_grouped)
 #### Clean WDI population data ####
       ## Check the observations:
   
@@ -129,16 +129,19 @@ df <- full_join(Covid_raw_grouped,Pop_raw, by = c("Country" = "Country"))
   View( df %>% filter( !complete.cases(df) ) )
 # Drop if population, confirmed cases or death is missing
   df <- df %>% filter( !( is.na( Population ) | is.na( Confirmed ) | is.na( Death ) ))
+
+  
 # Add 1 to Death / Recovered / Active to enable log transformations
     # Deaths: 12x 0s / Recovered: 3x 0s / Active: 2x 0s
-
-  df <- df %>% transmute( Confirmed   = Confirmed/1000,
+  df <- df %>% transmute( Country     = Country,
+                          Confirmed   = Confirmed/1000,
                           Death       = (Death + 1)/1000,
                           Recovered   = (Recovered +1)/1000,
                           Active      = (Active +1)/1000,
                           Population  = Population/1000000)    
   summary(df)
-  
+
+  View(df)  
 # Save clean data
 
 write.csv( df , 'covid_pop_10_20_2020_clean.csv')
