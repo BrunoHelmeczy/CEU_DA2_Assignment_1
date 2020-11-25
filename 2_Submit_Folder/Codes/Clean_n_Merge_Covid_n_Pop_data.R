@@ -135,15 +135,16 @@ df <- full_join(Covid_raw_grouped,Pop_raw, by = c("Country" = "Country"))
     # Deaths: 12x 0s / Recovered: 3x 0s / Active: 2x 0s
   df <- df %>% transmute( Country     = Country,
                           Confirmed   = Confirmed/1000,
-                          Death       = (Death + 1)/1000,
-                          Recovered   = (Recovered +1)/1000,
-                          Active      = (Active +1)/1000,
+                          Death       = (Death)/1000,
+                          Recovered   = (Recovered)/1000,
+                          Active      = (Active)/1000,
                           Population  = Population/1000000)    
   summary(df)
 
   View(df)  
 # Save clean data
-
-write.csv( df , 'covid_pop_10_20_2020_clean.csv')
+getwd()
+setwd("C:/Users/helme/Desktop/CEU/FALL_TERM/Data_Analysis/DA2/CEU_DA2_Assignment_1/2_Submit_Folder")
+write.csv( df , 'Data/Clean/covid_pop_10_20_2020_clean.csv')
   
   
