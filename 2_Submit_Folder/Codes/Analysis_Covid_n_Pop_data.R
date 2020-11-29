@@ -24,12 +24,13 @@
   library(estimatr)       # Estimate robust SE
   library(texreg)         # Compare models with robust SE
   library(ggthemes)       # For different themes
+  library(knitr)
 
 # Read Cleaned Data file from GitHub
   CovidCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/2_Submit_Folder/Data/Clean/covid_pop_10_20_2020_clean.csv"
   df <- read_csv(CovidCSV)
   df <- df %>% select( -X1)
-  View(df)
+  
   ####
   # 
 # Quick check on all HISTOGRAMS
@@ -47,13 +48,73 @@
           # +1 added to Death / Recovered / Active to enable log-transformation
         # Population by 1000000
 
-  View(df)
-          
+
+            
 ### Histogram check Deaths & Confirmed Cases
+
+# Confirmed Deaths (1000s)  
   df %>% ggplot() +
-    geom_density(aes(x = Ln_Death), fill = "red", bins = 100, alpha = 0.3) +
-    geom_density(aes(x = Ln_Confirmed), fill = "blue", bins = 100, alpha = 0.3) +
-    labs(x = "Number of Deaths & Confirmed Cases - ln Scales")
+    geom_histogram(aes(x = Death), fill = "red"
+                   ,  alpha = 0.3, binwidth = 10) +
+    labs(x = "Number of Confirmed Deaths (1.000s)",
+         y = "Number of Countries") 
+
+# Death Stats:
+DeathStats <-  
+  df %>% summarise(
+    Variable  = "Covid-19 Deaths (1000s)",
+    Min       = min(Death,na.rm = T),
+    '1st IQR'  = quantile(Death, 0.25, na.rm = T),
+    Median    = median(Death,na.rm = T),
+    '3rd IQR' = quantile(Death,0.75, na.rm = T),
+    Max       = max(Death,na.rm = T),
+    Mean      = mean(Death,na.rm = T),
+    StDev     = sd(Death,na.rm = T)
+  )
+
+# Confirmed Cases (1000s)
+  df %>% ggplot() +
+    geom_histogram(aes(x = Confirmed), fill = "blue"
+                   , alpha = 0.3, binwidth = 500) +
+    labs(x = "Number of Confirmed Cases (1.000s)",
+         y = "Number of Countries")
+  
+# CONIFRMED Stats
+CasesStats <-  
+  df %>% summarise(
+    Variable  = "Covid-19 Cases (1000s)",
+    Min       = min(Confirmed,na.rm = T),
+    '1st IQR'  = quantile(Confirmed, 0.25, na.rm = T),
+    Median    = median(Confirmed,na.rm = T),
+    '3rd IQR' = quantile(Confirmed,0.75, na.rm = T),
+    Max       = max(Confirmed,na.rm = T),
+    Mean      = mean(Confirmed,na.rm = T),
+    StDev     = sd(Confirmed,na.rm = T)
+  )
+  
+  
+# Population
+  df %>% ggplot() +
+    geom_histogram(aes(x = Population), fill = "green"
+                   , alpha = 0.3, bins = 50) +
+    labs(x = "Population (1.000.000s)",
+         y = "Number of Countries")
+  
+# Population Stats
+  
+PopStats <- df %>% summarise(
+    Variable  = "Population (1M)",
+    Min       = min(Population,na.rm = T),
+    '1st IQR'  = quantile(Population, 0.25, na.rm = T),
+    Median    = median(Population,na.rm = T),
+    '3rd IQR' = quantile(Population,0.75, na.rm = T),
+    Max       = max(Population,na.rm = T),
+    Mean      = mean(Population,na.rm = T),
+    StDev     = sd(Population,na.rm = T)
+  )
+  
+SummStats <- PopStats %>% add_row(CasesStats) %>% add_row(DeathStats)
+  
   
   
   summary( df )
@@ -70,16 +131,16 @@
 df %>% ggplot(aes(x = Confirmed, y = Death)) +
     geom_point() +
     geom_smooth(method = "loess") +
-    labs(x = "Number of Confirmed Cases (1000s)",
-         y = "Number of Registered Deaths (1000s)")
+    labs(x = "Nr. of Confirmed Cases (1000s)",
+         y = "Nr. of Registered Deaths (1000s)")
 
 
 # 2) Deaths - Confirmed Cases -> Level-Log
   df %>% ggplot(  aes(x = Confirmed, y = Death)) +
     geom_point() +
     geom_smooth(method="loess") +
-    labs(x = "Number of Confirmed Cases (1000s) - ln scale",
-         y = "Number of Registered Deaths (1000s)")  +
+    labs(x = "Nr. of Confirmed Cases (1000s) - ln scale",
+         y = "Nr. of Registered Deaths (1000s)")  +
     scale_x_continuous( trans = log_trans(),  
                         breaks = c(1,2,5,10,20,50,100,200,500,1000,10000) )
 
@@ -87,8 +148,8 @@ df %>% ggplot(aes(x = Confirmed, y = Death)) +
   df %>% ggplot(  aes(x = Confirmed, y = Death)) +
     geom_point() +
     geom_smooth(method="loess") +
-    labs(x = "Number of Confirmed Cases (1000s) - ln scale",
-         y = "Number of Registered Deaths (1000s)")  +
+    labs(x = "Nr. of Confirmed Cases (1000s) - ln scale",
+         y = "Nr. of Registered Deaths (1000s)")  +
     scale_y_continuous( trans = log_trans(),  
                         breaks = c(1,2,5,10,20,50,100,200,500,1000,10000) )
   
@@ -96,11 +157,12 @@ df %>% ggplot(aes(x = Confirmed, y = Death)) +
   df %>% ggplot(  aes(x = Confirmed, y = Death)) +
     geom_point() +
     geom_smooth(method="loess") +
-    labs(x = "Number of Confirmed Cases (1000s) - ln scale",
-         y = "Number of Registered Deaths (1000s)")  +
+    labs(x = "Nr. of Confirmed Cases (1000s) - ln scale",
+         y = "Nr. of Registered Deaths (1000s)")  +
     scale_x_continuous( trans = log_trans(),  
                         breaks = c(1,2,5,10,20,50,100,200,500,1000,10000) ) + 
-    scale_y_continuous(trans = log_trans())
+    scale_y_continuous(trans = log_trans(),
+                       breaks = c(1,2,5,10,20,50,100,200,500,1000,10000))
 
 ####
 # Conclusions:
@@ -117,9 +179,11 @@ df %>% ggplot(aes(x = Confirmed, y = Death)) +
 #                   - weight by population may impact results much
   
   
-# Take log of Deaths & Confirmed Cases:
-  df <- df %>% mutate(Ln_Death     = log(Death),
-                      Ln_Confirmed = log(Confirmed))
+# Take log of Deaths & Confirmed Cases - Filter out Countries with 0 Deaths:
+  df <- df %>% filter(Death > 0) %>% 
+                  mutate(Ln_Death     = log(Death),
+                         Ln_Confirmed = log(Confirmed)) %>% 
+                    arrange(Ln_Death)
 
   
 # Outline Models:
@@ -194,23 +258,23 @@ ggplot(data = df, aes(x = Ln_Confirmed, y = Ln_Death)) +
 
 
 # Model Summary using TexReg #
+library(jtools)
+library(huxtable)
+exptbl <- export_summs(reg1, reg2,reg3,reg4,
+                       model.names = c("Ln_Deaths",
+                                       "Ln_Deaths",
+                                       "Ln_Deaths",
+                                       "Ln_Deaths"))
 
-data_out <- paste0(getwd(),"/")
-htmlreg( list(reg1 , reg2 , reg3 , reg4 ),
-         type = 'html',
-         custom.model.names = c("Nr. of Reg. Cases Log-Log linear",
-                                "Nr. of Reg. Cases Log-Log - quadratic",
-                                "Nr. of Reg. Cases Log-Log - PLS",
-                                "Nr. of Reg. Cases Log-Log linear - Pop. weighted"),
-         caption = "Modelling Countries' Covid-Related Deaths & Registered Cases ",
-         file = paste0( data_out ,'CovidDeaths_vs_Cases_model_compare.html'), include.ci = FALSE)
+
+
 
 
 ######
 # Based on model comparison our chosen model is reg4 - Ln_Death ~ Ln_Confirmed (weights = Population)
 #   Substantive: - log-log interpretation works properly for countries 
 #                   - magnitude of coefficients are meaningful
-#                   - Weights changes regression interpretations to country individuals
+#                   - Weights change regression interpretation to country individuals
 #                     - Residual analysis reflects on individuals likelihood to die
 #                   - Interpretation: With 10% increase in cases, 
 #                     - deaths are expected to increase 9.55% among population 
@@ -218,57 +282,57 @@ htmlreg( list(reg1 , reg2 , reg3 , reg4 ),
 #                   - Weights minimize effect of small but unusually well-preforming countries
 
 
+paste0("ln(Death) = ",round(as.numeric(reg4$coefficients[1]),2)
+       ," + ", round(as.numeric(reg4$coefficients[2]),2)
+       ," * ln(Confirmed Cases)")
 
+reg4$coefficients[2]
+
+names(reg4$coefficients[2])
 
 ######
 # Residual analysis.
 
-# lm_robust output is an `object` or `list` with different elements
-# Check the `Value` section
-?lm_robust
-
-
-df$reg1_y_pred <- reg1$fitted.values
 df$reg4_y_pred <- reg4$fitted.values
 # Calculate the errors of the model
-df$reg4_y_pred
 
-# df$Ln_Death - df$reg1_y_pred
 df$Ln_Death - df$reg4_y_pred 
 
-# df$reg1_res <- df$Ln_Death - df$reg1_y_pred 
 df$reg4_res <- df$Ln_Death - df$reg4_y_pred 
 
-## Residual Plotting - Simple vs Wegihted Log-Log Regression  
-df %>% ggplot(aes(x = Ln_Confirmed), alpha = 0.5) +
-  geom_point(aes(y = reg1_res), color = 'red', alpha = 0.5) +
-  geom_point(aes(y = reg4_res), color = 'blue', alpha = 0.5) +
-  geom_hline(yintercept = 0) +
-  labs(x = "Nr of Confirmed Cases - ln Scale",
-       y = "Regression Residuals - Models 1 & 4")
-      # Identical residual distribution w shifting mean
-
-## Residual Histograms
-df %>% ggplot( alpha = 0.5) +
-  geom_density(aes(x = reg1_res), fill = 'red', alpha = 0.3) + 
-  geom_vline(xintercept = 0.1) +
-  geom_density(aes(x = reg4_res), fill = 'blue', alpha = 0.3) +
-  geom_vline(xintercept = -0.3) +
-  labs(x = "Regression Model residuals",
-       y = "Errors' Kernel Density") +
-  scale_x_continuous(breaks = (-8:8)/2)
-
-rbind(summary(df$reg1_res),
-summary(df$reg4_res))
-
-
 # Find countries with largest negative errors - reg4 - Log-Log W-OLS
-df %>% top_n( -5 , reg4_res ) %>% 
-  select( Country , Ln_Death , reg4_y_pred , reg4_res)
+best <- df %>% top_n( -5 , reg4_res ) %>% 
+  select( Country,  Ln_Death , reg4_y_pred , reg4_res)  %>% 
+  summarise( BestCountries = Country,
+             Ln_Deaths = Ln_Death,
+             Pred_Value = reg4_y_pred,
+             Pred_Error = reg4_res)
 
 # Find countries with largest positive errors
-df %>% top_n( 5 , reg4_res ) %>% 
-  select( Country , Ln_Death , reg4_y_pred , reg4_res)
+worst <- df %>% top_n( 5 , reg4_res ) %>% 
+  select( Country, Ln_Death , reg4_y_pred , reg4_res) %>% 
+  summarise( WorstCountries = Country,
+             Ln_Deaths = Ln_Death,
+             Pred_Value = reg4_y_pred,
+             Pred_Error = reg4_res)
+
+df %>% 
+  select( Country, Ln_Death , reg4_y_pred , reg4_res) %>% 
+  summarise( WorstCountries = Country,
+             Ln_Deaths = Ln_Death,
+             Pred_Value = reg4_y_pred,
+             Pred_Error = reg4_res,
+             rank(df$reg4_res)) %>% 
+  arrange(Pred_Error) %>% 
+  filter(WorstCountries ==  c("China", "United States" ))
+
+View(df)
+
+
+rank(df$reg4_res)
+
+
+cbind(best, worst)
 
 
 #################################
@@ -277,16 +341,11 @@ df %>% top_n( 5 , reg4_res ) %>%
 # 1) Coefficient is equal to 0:
 # Implemented by default...
 summary( reg4 )
-summary(reg1)
-
-# 2) Coefficient is equal to your favorite value
-# Let test: H0: ln_gdppc = 5, HA: ln_gdppc neq 5
-linearHypothesis( reg4 , "Ln_Confirmed = 0")
+round(as.data.frame(summary( reg4 )[[12]]),4)
 
 
 
 
-
-
+pnorm(5.4,0,1)
 
 

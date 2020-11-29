@@ -1,0 +1,497 @@
+---
+title: "DA2_Assignment1"
+author: "Bruno Helmeczy"
+date: "29/11/2020"
+output:
+  pdf_document: default
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+---
+
+## Executive Summary
+This report analyses the pattern of association between confirmed Covid-19 cases, and the respective number of Covid-19 related deaths countries experienced, as of 20th October, 2020. Visual inspection (available in the appendices) highlighted a log-log linear association pattern between deaths and confirmed cases, leading to estimation and comparison of 4 log-log linear regression models. 
+
+The log-log population-weighted linear regression model was chosen, boasting statistically significant regression parameters, and explaining 92.9% of variation in Covid-19 related deaths among countries with variation in confirmed Covid-19 cases (adjusted R-squared). According to this model, people observing 10% larger number of confirmed cases in a country, on average can expect to observe 9.5% larger number of deaths. The core message is two-fold: 1st, the association pattern is close to 1 for all tested models, where 1 implies a constant ratio between case & death figures i.e. virus deadliness, and 2nd the 0.05 deviation in the slope parameter, points to how other factors could also be useful in predicting covid-19 related deaths. 
+
+Indeed, age and health were shown to influence covid-19 infected individuals’ probability of dying, therefore including such demographic variables at the national level could improve the chosen models’ predictive power. On the other hand, some national governments may choose to “massage” statistics to avoid losing face, which if proven, undermines the validity of results & conclusions derived in this report.
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+  library(tidyverse)
+  require(scales)         # For scaling ggplots
+  library(moments)
+  library(lspline)        # To Estimate piece-wise linear splines
+  library(estimatr)       # Estimate robust SE
+  library(texreg)         # Compare models with robust SE
+  library(ggthemes)       # For different themes
+  library(knitr)
+  library(gridExtra)
+
+# Read Cleaned Data file from GitHub
+  CovidCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/2_Submit_Folder/Data/Clean/covid_pop_10_20_2020_clean.csv"
+  df <- read_csv(CovidCSV)
+  df <- df %>% select( -X1)
+
+
+
+```
+
+
+#### 1) Introduction:
+This report investigates how well confirmed covid-19 cases explain covid-19 related death figures. Thus, the research question is: “How many deaths can be expected, knowing how many confirmed cases there are in a country?” The population is all Covid infected people worldwide, from which Covid-related statistics where sampled in cross-sectional format as of 20th October, 2020, aggregated to country-level. 
+Data Quality issues arise in terms of Validity & Reliability. It takes 7 days to show symptoms once infected, then once the decision arises to test (which may take additional time, depending on nations’ size and healthcare infrastructure), people may shrug it off, and if they decides not to test, he/she would not be registered. 
+
+Indeed, researchers claimed observed covid-19 figures are rather an estimate of the situation 10-14 days earlier.
+Additionally, a country’s size may be a source of bias: 1st due to faster being able to implement reactionary measures to manage virus spread and especially deaths. 2nd, the difference between true virus related cases and deaths versus the currently available figures constitutes a larger proportion of true virus related figures, causing a stronger negative bias, if measured in percentage terms.
+
+#### 2) Filtering & Scaling Observations:
+Covid-19 related data was collected from Johns Hopkins University, aggregated to country-level, scaled by 1.000, and merged with national population data scaled by a 1.000.000. Countries whom did not report confirmed number of cases or population figures, were dropped (23), together with countries reporting 0 deaths (12) (treated as outliers), netting 170 observations.
+
+
+```{r, message = F, echo = FALSE, fig.height= 1.3, fig.align='center'}
+
+### Histogram & Summary Stats check -  Deaths & Confirmed Cases + Population
+
+# Confirmed Deaths (1000s)  
+DeathHist <-  df %>% ggplot() +
+    geom_histogram(aes(x = Death), fill = "red"
+                   ,  alpha = 0.3, bins = 50) +
+    labs(x = "Nr. of Confirmed Deaths (1.000s)",
+         y = "") +
+    theme(axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+
+# Confirmed Cases (1000s)
+CaseHist <-  df %>% ggplot() +
+    geom_histogram(aes(x = Confirmed), fill = "blue"
+                   , alpha = 0.3,  bins = 50) +
+    labs(x = "Nr. of Confirmed Cases (1.000s)", y = "") +
+    theme(axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+  
+# Population
+PopHist <-  df %>% ggplot() +
+    geom_histogram(aes(x = Population), fill = "green"
+                   , alpha = 0.3, bins = 50) +
+    labs(x = "Population (1.000.000s)", y = "Nr. of Countries") +
+    theme(axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+  
+# Log-Transformed Histograms 4 appendices
+# Ln Transform Investigations -> Appendix
+# Confirmed Deaths (1000s)  
+Death_ln_Hist <- df %>% ggplot() +
+    geom_histogram(aes(x = log(Death)), fill = "red",  alpha = 0.3) +
+    labs(x = "Ln of Confirmed Deaths (1.000s)",
+         y = "") +
+    theme(axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+
+# Confirmed Cases (1000s)
+Case_ln_Hist <- df %>% ggplot() +
+    geom_histogram(aes(x = log(Confirmed)), fill = "blue", alpha = 0.3) +
+    labs(x = "Ln of Confirmed Cases (1.000s)", y = "") +
+    theme(axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+  
+# Population
+Pop_ln_Hist <- df %>% ggplot() +
+    geom_histogram(aes(x = log(Population)), fill = "green", alpha = 0.3, bins = 50) +
+    labs(x = "Ln of Population (1.000.000s)", y = "Nr. of Countries") +
+    theme(axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+
+
+
+# Create Inputs 4 Summary Statistic Tables
+PopStats <- df %>% summarise(
+    Variable  = "Population (1M)",
+    Min       = round(min(Population,na.rm = T),2),
+    '1st IQR' = round(quantile(Population, 0.25, na.rm = T),2),
+    Median    = round(median(Population,na.rm = T),2),
+    '3rd IQR' = round(quantile(Population,0.75, na.rm = T),2),
+    Max       = round(max(Population,na.rm = T),2),
+    Mean      = round(mean(Population,na.rm = T),2),
+    StDev     = round(sd(Population,na.rm = T),2),
+    Skewness  = round(skewness(Population, na.rm = T),2))
+
+CasesStats <-   df %>% summarise(
+    Variable  = "Covid-19 Cases (1000s)",
+    Min       = round(min(Confirmed,na.rm = T),2),
+    '1st IQR' = round(quantile(Confirmed, 0.25, na.rm = T),2),
+    Median    = round(median(Confirmed,na.rm = T),2),
+    '3rd IQR' = round(quantile(Confirmed,0.75, na.rm = T),2),
+    Max       = round(max(Confirmed,na.rm = T),2),
+    Mean      = round(mean(Confirmed,na.rm = T),2),
+    StDev     = round(sd(Confirmed,na.rm = T),2),
+    Skewness  = round(skewness(Confirmed, na.rm = T),2))
+  
+DeathStats <-  df %>% summarise(
+    Variable  = "Covid-19 Deaths (1000s)",
+    Min       = round(min(Death,na.rm = T),2),
+    '1st IQR' = round(quantile(Death, 0.25, na.rm = T),2),
+    Median    = round(median(Death,na.rm = T),2),
+    '3rd IQR' = round(quantile(Death,0.75, na.rm = T),2),
+    Max       = round(max(Death,na.rm = T),2),
+    Mean      = round(mean(Death,na.rm = T),2),
+    StDev     = round(sd(Death,na.rm = T),2),
+    Skewness  = round(skewness(Death, na.rm = T),2))
+
+SummStats <- CasesStats %>% add_row(DeathStats)  
+
+grid.arrange(PopHist, CaseHist, DeathHist, ncol = 3)
+SummStats %>% kable()
+
+# Take log of Deaths & Confirmed Cases - Filter out Countries with 0 Deaths:
+df <- df %>% filter(Death > 0) %>% 
+                  mutate(Ln_Death     = log(Death),
+                         Ln_Confirmed = log(Confirmed)) %>% 
+                    arrange(Ln_Death)
+
+
+# Add powers of the variable(s) to the dataframe:
+df <- df %>% mutate( Ln_Confirmed_sq = Ln_Confirmed^2)
+
+
+```
+
+#### 3) Histograms & Summary Stats:
+Data sets’ variables of interests’ histograms resemble a power-law distribution, i.e. frequencies decreasing by a similar ratio interval-to-interval, with some positive outliers. Skewness can be observed in all cases (ranging 6.6-7.3), also by variable means being above 75th percentiles. 
+
+#### 4) Ln Transformations:
+A theoretical power-law distribution approximates both observed variables well, thus logarithmic transformations created approximately normal distributions for both number of confirmed cases & deaths. Scatter-plots in turn show visibly strong log-log linear association, meaning percentage changes in confirmed cases numbers can be strongly associated with percentage changes in deaths.
+Substantively, population is power-law distributed, and pandemics are declared based on a given percentage of population becoming infected, while a viruses deadliness is measured in terms of the percentage of infected people it kills, thus both variables being linked to the population distribution. Another disease measure is infectiousness, based on the growth-rate of infections, as every sick person is able to infect approximately the same number of people. Given both virus growth-rate, and deadliness are relatively constant rates, being able to observe a linear association pattern between percentage increase in deaths and percentage increase in cases is expected. 
+
+
+
+```{r, message = F, warning = F, echo = FALSE, fig.height= 4, fig.align='center'}
+
+# Check basic scatter-plots!
+  # Y = Number of Registered Deaths
+  # X = Number of Registered Cases
+  # Where to use log-transformation? - 
+    # level-level vs level-log vs log-level vs log-log
+  
+  
+# 1) Deaths - Confirmed Cases -> Level-Level 
+LevelLevelScatt <- df %>% ggplot(aes(x = Confirmed, y = Death)) +
+    geom_point() +
+    geom_smooth(method = "loess") +
+    labs(title = "Level-Level Scatter Plot Inspection", 
+          x = "Nr. of Cases (1000s)",
+          y = "Nr. of Deaths (1000s)") +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+
+
+# 2) Deaths - Confirmed Cases -> Level-Log
+LevelLogScatt <-  df %>% ggplot(  aes(x = Confirmed, y = Death)) +
+    geom_point() +
+    geom_smooth(method="loess") +
+    labs(title = "Level-Log Scatter Plot Inspection", 
+          x = "Nr. of Cases (1000s) - ln scale",
+          y = "Nr. of Deaths (1000s)")  +
+    scale_x_continuous( trans = log_trans(),  
+                        breaks = c(1,2,5,10,20,50,100,200,500,1000,10000) ) +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+
+# 3) Deaths - Confirmed Cases -> Log-Level
+LogLevel_Scatt <-  df %>% ggplot(  aes(x = Confirmed, y = Death)) +
+    geom_point() +
+    geom_smooth(method="loess") +
+    labs(title = "Log-Level Scatter Plot Inspection", 
+          x = "Nr. of Cases (1000s)",
+         y = "Nr. of Deaths (1000s) - ln scale")  +
+    scale_y_continuous( trans = log_trans(),  
+                        breaks = c(1,2,5,10,20,50,100,200,500,1000,10000) ) +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+  
+# 4) Deaths - Confirmed Cases -> Log-Log
+LogLog_Scatt <-  df %>% ggplot(  aes(x = Confirmed, y = Death)) +
+    geom_point() +
+    geom_smooth(method="loess") +
+    labs( title = "Log-Log Scatter Plot Inspection", 
+          x = "Nr. of Cases (1000s) - ln scale",
+          y = "Nr. of Deaths (1000s) - ln scale")  +
+    scale_x_continuous( trans = log_trans(),  
+                        breaks = c(1,2,5,10,20,50,100,200,500,1000,10000) ) + 
+    scale_y_continuous(trans = log_trans(),
+                       breaks = c(1,2,5,10,20,50,100,200,500,1000,10000)) +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "white"))
+
+```
+
+#### 5) Model Choice & Interpretation:
+
+
+```{r, message = F, warning = F, echo = F,size=1, fig.height= 4, fig.align='center'}
+
+# Outline Models:
+
+  # Make some models:
+  
+# Log-Log Simple Linear Regression
+  # reg1: Ln_Death = alpha + beta * Ln_Confirmed
+
+# Log-Log Linear Regression - Quadratic Form
+  # reg2: Ln_Death = alpha + beta_1 * Ln_Confirmed + beta_2 * Ln_Confirmed^2
+
+# Log-Log Linear Regression - Piece-wise Linear Splines - Knots at 2 & 30 (1000s Scale)
+  # reg3: Ln_Death = alpha_1 + beta_1 * Ln_Confirmed  * 1(Ln_Confirmed < 2) +
+    #               (alpha_2 + beta_2 * Ln_Confirmed) * 1(Ln_Confirmed < 30) +
+    #               (alpha_3 + beta_3 * Ln_Confirmed) * 1(Ln_Confirmed >= 30)
+  
+# Log-Log Weighted Linear Regression - Weights = Population 
+  # reg4: Ln_Death = alpha + beta * Ln_Confirmed, weights: Population
+
+
+#### MODELS ####
+
+###  REG 1: Log-Log Linear Regression ###
+reg1 <- lm_robust( Ln_Death ~ Ln_Confirmed , data = df , se_type = "HC2")
+
+###  REG 2: Log-Log Linear Regression ###
+reg2 <- lm_robust( Ln_Death ~ Ln_Confirmed + Ln_Confirmed_sq , data = df, se_type = "HC2" )
+
+###  REG 3: Log-Log Linear Regression - Piece-wise Linear Spline ###
+  # Create Cutoff & Log Cutoffs 
+cutoff <- c(2,20)
+cutoff_ln<- log( cutoff )
+
+reg3 <- lm_robust(Ln_Death ~ lspline( Ln_Confirmed , cutoff_ln ), data = df, se_type = "HC2"  )
+
+###  REG 4: Log-Log Linear Regression - Population as Weights ###
+reg4 <- lm_robust(Ln_Death ~ Ln_Confirmed, data = df , weights = Population, se_type = "HC2" )
+
+#### MODELS Visualizations ####
+
+###  REG 1: Log-Log Linear Regression ###
+Reg1Plot <- ggplot( data = df, aes( x = Ln_Confirmed, y = Ln_Death ) ) + 
+  geom_point( color='blue') +
+  geom_smooth( method = lm , color = 'red' ) +
+  labs(title = "Log-Log Lin. Regression") +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_line(colour = "grey"),
+        panel.background = element_rect(fill = "white"))
+
+###  REG 2: Log-Log Linear Regression - Quadratic Polynomial  ###
+Reg2Plot <- ggplot( data = df, aes( x = Ln_Confirmed, y = Ln_Death ) ) + 
+  geom_point( color='blue') +
+  geom_smooth( formula = y ~ poly(x,2) , method = lm , color = 'red' ) +
+  labs(title = "Log-Log Lin. Regression - 2nd Polynomial")  +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_line(colour = "grey"),
+        panel.background = element_rect(fill = "white"))
+
+###  REG 3: Log-Log Linear Regression - Piece-wise Linear Spline ###
+Reg3Plot <- ggplot( data = df, aes( x = Ln_Confirmed, y = Ln_Death ) ) + 
+  geom_point( color='blue') +
+  geom_smooth( formula = y ~ lspline(x,cutoff_ln) , method = lm , color = 'red' ) +
+  labs(title = "Log-Log Lin. Regr. - Piecewise Lin. Spline")  +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_line(colour = "grey"),
+        panel.background = element_rect(fill = "white"))
+
+###  REG 4: Log-Log Linear Regression - Population as Weights ###
+Reg4Plot <- ggplot(data = df, aes(x = Ln_Confirmed, y = Ln_Death)) +
+  geom_point(data = df, aes(size= Population),  color = 'blue', shape = 16, alpha = 0.6,  show.legend=F) +
+  geom_smooth(aes(weight = Population), method = "lm", color='red')+
+  labs(title = "Log-Log Lin. Regression - Pop. Weighed")  +
+    theme(title = element_text(size = 8),
+        axis.title = element_text(size = 8),
+        panel.grid.major = element_line(colour = "grey"),
+        panel.background = element_rect(fill = "white"))
+
+```
+
+
+The chosen regression model is the Log-Log Weighted Linear Regression, weighed by countries’ populations. Please see the models' graph and formula below. For an argument on model choice, please visit the appendices.
+
+```{r, message = F, warning = F, echo = F, fig.align='center', fig.height=2, fig.width= 6}
+
+Formula <- paste0("   ln( Death )  =  ",round(as.numeric(reg4$coefficients[1]),2)
+       ,"  +  ", round(as.numeric(reg4$coefficients[2]),2)
+       ,"  *  ln( Confirmed Cases )   ")
+
+
+
+Formula %>% kable( align = 'l', col.names ="Pop. Weighed Log-Log Linear Regression equation:")
+
+# kables(list(kable(Formula, col.names ="Pop. Weighed Log-Log Linear Regression equation:"),kable(Reg4Plot)))
+
+Reg4Plot + labs(title = "Log-Log Lin. Regression - Pop. Weighed")  +
+  theme(title = element_text(size = 12),
+        axis.title = element_text(size = 10))
+
+```
+
+
+
+Though the intercept (alpha) parameter is not meaningfully interpretable with a log-log regression model, its slope (beta) parameter tells, that for people across all countries, a +10 percent change in confirmed Covid-19 cases is associated with +9.5 percent change in Covid-19 related deaths, on average. That is 0.8 percent less than the simple log-log linear regression model slope, highlighting that smaller countries experience disproportionately low number of deaths relative to their case numbers, which if not weighed, gives the perception that death figures’ growth rate is larger than case numbers’.
+
+
+#### 6) Beta Parameter Hypothesis Test: 
+The 1st necessity to establish any meaningful pattern association between the number of confirmed cases and deaths, is testing whether beta, the slope parameter is equal to zero. Thus, the null-hypothesis is Beta = 0, the alternative hypothesis being Beta not being equal to zero. The chosen significance level is 0.1%, due to the realistic need for leaders to be absolutely sure of such an association for decision-making, meaning the maximum accepted probability of a false-positive is 0.001. For the test to satisfy this requirement, the t-statistic must be at least 3.1 distance from 0. 
+
+```{r, message = F, warning = F, echo = F, fig.align='center', fig.height=3, fig.width= 5}
+library(jtools)
+library(huxtable)
+library(car)
+library(knitr)
+ModelStats <- round(as.data.frame( summary( reg4 )[[12]]),4)
+
+ModelStats %>% kable()
+
+```
+
+As can be seen from the table above, the beta parameters’ (Ln_Confirmed) t value is 15.25, providing ample evidence to reject the null hypothesis, and accept the alternative hypothesis, that the beta parameter is not equal to zero, with 99.9% confidence. In fact, there is less than 1 in a million chance that accepting the alternative hypothesis would result in a false positive error.
+
+
+
+
+
+#### 7) Residual Analysis: 
+Best countries were defined as those with largest negative residuals versus respective model-predicted values, while on the flip side, Worst countries as those with largest positive residuals versus model predicted values. If one accepts countries’ deviations from residuals as a measure of job quality nations’ governments have performed in pandemic management thus far, the Singaporean leadership qualifies 1st worldwide, despite being the most densely populated nation, which is supposed to influence its’ pandemic management very negatively.
+
+
+
+```{r, message = F, warning = F, echo= F, fig.align='center', fig.height= 2, fig.width=3}
+
+# Residual analysis.
+
+df$reg4_y_pred <- reg4$fitted.values
+# Calculate the errors of the model
+df$reg4_res <- df$Ln_Death - df$reg4_y_pred 
+
+# Find countries with largest negative errors - reg4 - Log-Log W-OLS
+best <- df %>% top_n( -5 , reg4_res ) %>% 
+  select( Country,  Ln_Death , reg4_y_pred , reg4_res)  %>% 
+  summarise( Best = Country,
+             Ln_Deaths     = round(Ln_Death,2),
+             Pred    = round(reg4_y_pred,2),
+             Error    = round(reg4_res,2)) %>% 
+  arrange(Error)
+
+# Find countries with largest positive errors
+worst <- df %>% top_n( 5 , reg4_res ) %>% 
+  select( Country, Ln_Death , reg4_y_pred , reg4_res) %>% 
+  summarise( Worst = Country,
+             Ln_Deaths      = round(Ln_Death,2),
+             Pred     = round(reg4_y_pred,2),
+             Error     = round(reg4_res,2)) %>% 
+  arrange(desc(Error))
+
+ResTable <- cbind(best, worst)
+
+ResTable %>% kable()
+```
+
+
+
+Iceland is the best-performing European country, while Yemen’s pandemic deaths in light of their covid-19 cases are worst worldwide, and Italy was the worst performing country in Europe, after the UK. Also, best performing countries’ absolute residual values are approximately twice to that of worst performing countries, possibly due to large-population countries, e.g. China boasting positive errors (ranking 159th), negatively influencing the models’ absolute-value beta parameter. On a final note, Hungary ranks 114th worldwide.
+
+
+
+# Appendices
+## 1) Variable Ln-Transformations
+
+```{r, message = F, warning = F, echo= F, fig.align='center', fig.height= 2}
+
+grid.arrange(Pop_ln_Hist, Case_ln_Hist, Death_ln_Hist, ncol = 3)
+
+```
+
+
+
+
+
+
+## 2) Variable Scatter-Plots: Level-Level, Level-Log, Log-Level, Log-Log 
+
+```{r , message = F, warning = F, echo= F, fig.align='center'}
+grid.arrange(LevelLevelScatt, LevelLogScatt, 
+             LogLevel_Scatt, LogLog_Scatt, ncol = 2)
+```
+
+
+## 3) Model Visuals
+
+
+
+```{r, message = F, warning = F, echo = F, fig.height= 4, fig.align='center'}
+
+grid.arrange(Reg1Plot, Reg2Plot, Reg3Plot,Reg4Plot, ncol = 2)
+
+```
+
+
+
+
+
+```{r, message = F, warning = F, echo = F,size=1, fig.height= 4, fig.align='center'}
+# Model Summary Statistics #
+
+exptbl <- export_summs(reg1, reg2,reg3,reg4,
+                       model.names = c("Ln_Deaths",
+                                       "Ln_Deaths",
+                                       "Ln_Deaths",
+                                       "Ln_Deaths - Weighted"),
+                       to.file = "html",
+                       file.name = paste0(getwd(),"/","modeltable.html"))
+Exptbl_chosen <- export_summs(reg4,
+                       model.names = "Ln_Deaths - Weighted")
+
+
+```
+
+
+## 4) Model Selection & Statistical Summaries
+Based on scatter-plot visuals, both variables of interest were log-transformed, from which 4 regression models were estimated: 1st a Log-Log Linear Regression, 2nd a Log-Log 2nd degree Polynomial regression, 3rd a Log-Log Piecewise Linear Spline Regression, and 4th a Log-Log Weighted linear Regression, weighed by countries’ respective populations. Using log-log models, their interpretations are “a certain percentage change in Confirmed Cases being associated with a certain percentage change in Deaths”. Overall, the 4 models perform well, each explaining at least 89% of variation in percentage change in Deaths, by the percentage change in Confirmed cases, while producing statistically significant parameters. The population weighed log-log regression stands out however, explaining 93% of variation in the outcome variable with variation in the explanatory variable. This model however, produced wider standard errors, causing its’ parameters’ sampling distributions to overlap with model 1, the log-log linear regression, both in case of the intercept and slope parameter. Hypothesis tests therefore, would not be able to reject with 95% confidence the hypothesis that these models are statistically the same.
+
+The 2 models however, differ in their interpretation significantly. The simple log-log regression outputs show how much percentage more deaths can a country expect on average, give how much percentage more confirmed cases it has country to country, as opposed to the population weighted regression outputs showing how much percentage more deaths can people expect on average, given how much percentage more confirmed cases there are. 
+
+Substantively, this makes a significant difference due to the data quality issues outline in the introduction. Firstly, the complexity associated with managing the pandemic at a national level is different depending on country size, thus smaller countries’ leaders arguably have an easier job managing infection rates once the virus is identified, as they are faster able to implement directives versus significantly larger countries. Thus it can be expected smaller countries are better able to minimize the number of deaths relative to the number of cases observed, skewing the true association pattern. 
+
+Secondly, the percentage difference between measured- and true virus-related figures is greater in smaller countries, and weighing smaller-country observations equally to large ones (e.g. Liechtenstein versus China) exposes the model to measurement errors in smaller countries. For these reasons, despite their parameters’ sampling distributions overlapping, my chosen model is the population weighted log-log regression model.
+
+
+```{r, message=F,warning=F, echo = F}
+as_hux(exptbl)
+
+```
+
+
+
+
+
+
+
+
+
+
