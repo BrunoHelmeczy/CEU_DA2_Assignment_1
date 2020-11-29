@@ -3,22 +3,18 @@ title: "DA2_Assignment1"
 author: "Bruno Helmeczy"
 date: "29/11/2020"
 output:
-  pdf_document: default
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
+  pdf_document: default
 ---
 
 ## Executive Summary
-This report analyses the pattern of association between confirmed Covid-19 cases, and the respective number of Covid-19 related deaths countries experienced, as of 20th October, 2020. Visual inspection (available in the appendices) highlighted a log-log linear association pattern between deaths and confirmed cases, leading to estimation and comparison of 4 log-log linear regression models. 
+This report analyses the pattern of association between confirmed Covid-19 cases, and the respective number of Covid-19 related deaths countries experienced, as of 20th October, 2020. After initial visual inspection, 4 log-log linear regression models were estimated and compared, from which the population weighted log-log linear regression model was selected. The model boasts statistically very significant regression parameters and explains 92.9% of variation in Covid-19 related deaths among countries, with variation in confirmed Covid-19 cases (adjusted R-squared). 
+According to this model, people observing 10% larger number of confirmed cases in a country, on average can expect to observe 9.5% larger number of deaths. The core message is two-fold: 
+1st, the association pattern is close to 1, a value implying constant ratio between case & death figures i.e. virus deadliness. 2nd, the 0.05 deviation in the slope parameter, points to how other factors could also be useful to consider in addition to cases, in order to better predict covid-19 related deaths. 
 
-The log-log population-weighted linear regression model was chosen, boasting statistically significant regression parameters, and explaining 92.9% of variation in Covid-19 related deaths among countries with variation in confirmed Covid-19 cases (adjusted R-squared). According to this model, people observing 10% larger number of confirmed cases in a country, on average can expect to observe 9.5% larger number of deaths. The core message is two-fold: 1st, the association pattern is close to 1 for all tested models, where 1 implies a constant ratio between case & death figures i.e. virus deadliness, and 2nd the 0.05 deviation in the slope parameter, points to how other factors could also be useful in predicting covid-19 related deaths. 
-
-Indeed, age and health were shown to influence covid-19 infected individuals’ probability of dying, therefore including such demographic variables at the national level could improve the chosen models’ predictive power. On the other hand, some national governments may choose to “massage” statistics to avoid losing face, which if proven, undermines the validity of results & conclusions derived in this report.
-
-
-
-
+Indeed, Age and Health were shown to influence Covid-19 infected individuals’ probability of dying, therefore including such demographic variables at the national level could improve the chosen models’ predictive power. On the other hand, countries report their deaths differently, some possibly including deaths due to covid-related complications, or only noting deaths due to covid, if no other health-problem was apparent in a subject. Uncovering significant deviations in figures if covid-deaths were interpreted differently, could potentially invalidate the analysis presented below.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -58,14 +54,17 @@ if(!require(huxtable)) install.packages("tidyverse", repos = "http://cran.us.r-p
 
 
 #### 1) Introduction:
-This report investigates how well confirmed covid-19 cases explain covid-19 related death figures. Thus, the research question is: “How many deaths can be expected, knowing how many confirmed cases there are in a country?” The population is all Covid infected people worldwide, from which Covid-related statistics where sampled in cross-sectional format as of 20th October, 2020, aggregated to country-level. 
-Data Quality issues arise in terms of Validity & Reliability. It takes 7 days to show symptoms once infected, then once the decision arises to test (which may take additional time, depending on nations’ size and healthcare infrastructure), people may shrug it off, and if they decides not to test, he/she would not be registered. 
+This report investigates how well can confirmed covid-19 cases explain covid-19 related deaths, i.e. the research question is: “How many deaths can be expected, knowing how many confirmed cases there are in a country?” The researchs' population are all Covid infected people worldwide, from which Covid-related statistics where sampled in cross-sectional format as of 20th October, 2020, aggregated to country-level. 
+Data Quality issues are apparent in terms of Validity & Reliability: It takes 7 days to for those infected to show symptoms, while the logistics of administering, conducting and reporting tests may take an additional week, unless people omitt to request testing altogether, resulting in unidentified cases.
 
-Indeed, researchers claimed observed covid-19 figures are rather an estimate of the situation 10-14 days earlier.
-Additionally, a country’s size may be a source of bias: 1st due to faster being able to implement reactionary measures to manage virus spread and especially deaths. 2nd, the difference between true virus related cases and deaths versus the currently available figures constitutes a larger proportion of true virus related figures, causing a stronger negative bias, if measured in percentage terms.
+Indeed, researchers claimed national Covid-19 figures observed at a point in time are rather an estimate of the situation 10-14 days ago.
+A country’s size may also be a source of bias, due to smaller countries being able to implement reactionary measures faster, to manage virus spread and especially deaths. On the other hand, the difference between true virus related cases and deaths versus currently available figures constitute a larger proportion of true virus related figures, causing a stronger negative bias, if measured in percentages.
 
 #### 2) Filtering & Scaling Observations:
-Covid-19 related data was collected from Johns Hopkins University, aggregated to country-level, scaled by 1.000, and merged with national population data scaled by a 1.000.000. Countries whom did not report confirmed number of cases or population figures, were dropped (23), together with countries reporting 0 deaths (12) (treated as outliers), netting 170 observations.
+Covid-19 related data was collected from Johns Hopkins University, aggregated to country-level, scaled by 1.000, and merged with national population data scaled by a 1.000.000. Countries whom did not report confirmed number of cases or population figures, were removed (23), together with countries reporting 0 deaths (12) (treated as outliers), netting 170 countries observed.
+
+#### 3) Histograms & Summary Stats:
+Histograms of countries Population, Cases, & Deaths resemble a power-law distribution with few positive outliers, i.e. frequencies decreasing by a similar ratio interval-to-interval. Skewness is visible in all cases (ranging 6.6-7.3), variable means being above 75th percentiles. 
 
 
 ```{r, message = F, echo = FALSE, fig.height= 1.3, fig.align='center'}
@@ -181,13 +180,10 @@ df <- df %>% mutate( Ln_Confirmed_sq = Ln_Confirmed^2)
 
 ```
 
-#### 3) Histograms & Summary Stats:
-Data sets’ variables of interests’ histograms resemble a power-law distribution, i.e. frequencies decreasing by a similar ratio interval-to-interval, with some positive outliers. Skewness can be observed in all cases (ranging 6.6-7.3), also by variable means being above 75th percentiles. 
 
 #### 4) Ln Transformations:
 A theoretical power-law distribution approximates both observed variables well, thus logarithmic transformations created approximately normal distributions for both number of confirmed cases & deaths. Scatter-plots in turn show visibly strong log-log linear association, meaning percentage changes in confirmed cases numbers can be strongly associated with percentage changes in deaths.
-Substantively, population is power-law distributed, and pandemics are declared based on a given percentage of population becoming infected, while a viruses deadliness is measured in terms of the percentage of infected people it kills, thus both variables being linked to the population distribution. Another disease measure is infectiousness, based on the growth-rate of infections, as every sick person is able to infect approximately the same number of people. Given both virus growth-rate, and deadliness are relatively constant rates, being able to observe a linear association pattern between percentage increase in deaths and percentage increase in cases is expected. 
-
+Substantively, population is power-law distributed, and global-, or national pandemics are declared based on a predetermined percentage of population becoming infected. Meanwhile, viruses deadliness is measured in terms of the percentage of infected people dying, a theoretically constant value, which would imply the percentage change of Covid cases to equal the percentage change of deaths (i.e. a slope parameter of 1 between these log-transformed variables).
 
 
 ```{r, message = F, warning = F, echo = FALSE, fig.height= 4, fig.align='center'}
@@ -261,7 +257,7 @@ LogLog_Scatt <-  df %>% ggplot(  aes(x = Confirmed, y = Death)) +
 #### 5) Model Choice & Interpretation:
 
 
-```{r, message = F, warning = F, echo = F,size=1, fig.height= 4, fig.align='center'}
+```{r, message = F, warning = F, echo = F,size=1, fig.height= 6, fig.align='center'}
 
 # Outline Models:
 
@@ -347,7 +343,7 @@ Reg4Plot <- ggplot(data = df, aes(x = Ln_Confirmed, y = Ln_Death)) +
 
 The chosen regression model is the Log-Log Weighted Linear Regression, weighed by countries’ populations. Please see the models' graph and formula below. For an argument on model choice, please visit the appendices.
 
-```{r, message = F, warning = F, echo = F, fig.align='center', fig.height=2, fig.width= 6}
+```{r, message = F, warning = F, echo = F, fig.align='center', fig.height=2.5, fig.width= 6}
 
 Formula <- paste0("   ln( Death )  =  ",round(as.numeric(reg4$coefficients[1]),2)
        ,"  +  ", round(as.numeric(reg4$coefficients[2]),2)
@@ -367,8 +363,7 @@ Reg4Plot + labs(title = "Log-Log Lin. Regression - Pop. Weighed")  +
 
 
 
-Though the intercept (alpha) parameter is not meaningfully interpretable with a log-log regression model, its slope (beta) parameter tells, that for people across all countries, a +10 percent change in confirmed Covid-19 cases is associated with +9.5 percent change in Covid-19 related deaths, on average. That is 0.8 percent less than the simple log-log linear regression model slope, highlighting that smaller countries experience disproportionately low number of deaths relative to their case numbers, which if not weighed, gives the perception that death figures’ growth rate is larger than case numbers’.
-
+Though the intercept (alpha) parameter is not meaningfully interpretable with a log-log regression model, its slope (beta) parameter tells, that for people across all countries, a +10 percent change in confirmed Covid-19 cases is associated with +9.5 percent change in Covid-19 related deaths, on average. Though all models yielded a slope parameter close to 1, the chosen model weighs the importance of a countries' statistics by its' population. While negating the impact of large number of smaller countries with less covid cases and deaths, this model implicitly accepts the notion that how well the pandemic is managed worldwide is a function of total cases worldwide, and some countries contribute to this figure more then others. 
 
 #### 6) Beta Parameter Hypothesis Test: 
 The 1st necessity to establish any meaningful pattern association between the number of confirmed cases and deaths, is testing whether beta, the slope parameter is equal to zero. Thus, the null-hypothesis is Beta = 0, the alternative hypothesis being Beta not being equal to zero. The chosen significance level is 0.1%, due to the realistic need for leaders to be absolutely sure of such an association for decision-making, meaning the maximum accepted probability of a false-positive is 0.001. For the test to satisfy this requirement, the t-statistic must be at least 3.1 distance from 0. 
@@ -380,7 +375,7 @@ ModelStats %>% kable()
 
 ```
 
-As can be seen from the table above, the beta parameters’ (Ln_Confirmed) t value is 15.25, providing ample evidence to reject the null hypothesis, and accept the alternative hypothesis, that the beta parameter is not equal to zero, with 99.9% confidence. In fact, there is less than 1 in a million chance that accepting the alternative hypothesis would result in a false positive error.
+As visible from the table above, the beta parameters’ (Ln_Confirmed) t value is 15.25, providing ample evidence to reject the null hypothesis, and accept the alternative hypothesis, that the beta parameter is not equal to zero, with 99.9% confidence. In fact, there is less than 1 in a million chance that accepting the alternative hypothesis would result in a false positive error.
 
 
 
@@ -424,7 +419,7 @@ ResTable %>% kable()
 
 
 
-Iceland is the best-performing European country, while Yemen’s pandemic deaths in light of their covid-19 cases are worst worldwide, and Italy was the worst performing country in Europe, after the UK. Also, best performing countries’ absolute residual values are approximately twice to that of worst performing countries, possibly due to large-population countries, e.g. China boasting positive errors (ranking 159th), negatively influencing the models’ absolute-value beta parameter. On a final note, Hungary ranks 114th worldwide.
+Iceland is the best-performing European country, while Yemen’s pandemic deaths in light of their covid-19 cases are worst worldwide, and Italy is the worst performing country in Europe, after the UK. Also, best performing countries’ absolute residual values are approximately twice to that of worst performing countries, possibly due to large-population countries, e.g. China boasting positive errors (ranking 159th), negatively influencing the models’ absolute-value beta parameter. On a final note, Hungary ranks 114th worldwide.
 
 
 
