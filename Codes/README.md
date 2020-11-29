@@ -1,4 +1,4 @@
-# CEU_DA2_Assignment_1
+# CEU_DA2_Assignment_1 - Code Files
 
 This repository folder contains 3 R-Scripts, together with the final Assignment report using the merged Covid-19 & Country Population data available under this repositorys' Data/Clean sub-folder, in RMarkdown format. Below is a bulletpoint outline on each files' contribution to the final assigment reports, available within the Documents sub-folder:
 
