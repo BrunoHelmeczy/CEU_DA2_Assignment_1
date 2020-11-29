@@ -24,7 +24,7 @@ The codes folder includes the following:
 - **Analysis_Covid_n_Pop_data.R:** this is the R script with all the analysis part of this project.
 - **DA2_Assignment1_Report.Rmd:** same as covid_analysis _data.R but in .Rmd. You should be able to replicate my results by running this Rmd file.
 
-### Docs folder: 
+### Documents folder: 
 - **.html** & **.pdf** reports - generated from **DA2_Assignment1_Report.Rmd**.
 
 
