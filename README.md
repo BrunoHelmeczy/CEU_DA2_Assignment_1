@@ -1,6 +1,10 @@
 ## CEU_DA2_Assignment_1
 
-This repository contains Bruno Helmeczy's 1st Assignment for the Data Analysis 2 - Regressions & Coding 1 - Data Analysis & Management with R courses at the Central European Universitys' MSc in Business Analytics curriculum. The assignment investigated the pattern of association between registered covid-19 cases and registered number of deaths due to covid-19 across countries, as of 20th October, 2020. The repository contains the following:
+This repository contains Bruno Helmeczy's 1st Assignment for the Data Analysis 2 - Regressions & Coding 1 - Data Analysis & Management with R courses at the Central European Universitys' MSc in Business Analytics curriculum. 
+
+URL to this Repository on GitHub: https://github.com/BrunoHelmeczy/CEU_DA2_Assignment_1
+
+The assignment investigated the pattern of association between registered covid-19 cases and registered number of deaths due to covid-19 across countries, as of 20th October, 2020. The repository contains the following:
 
 ### Data folder: 
 **Raw data set** 
