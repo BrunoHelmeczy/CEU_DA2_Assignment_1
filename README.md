@@ -1,6 +1,10 @@
 ## CEU_DA2_Assignment_1
 
-This repository contains Bruno Helmeczy's 1st Assignment for the Data Analysis 2 - Regressions & Coding 1 - Data Analysis & Management with R courses at the Central European Universitys' MSc in Business Analytics curriculum. The assignment investigated the pattern of association between registered covid-19 cases and registered number of deaths due to covid-19 across countries, as of 20th October, 2020. The repository contains the following:
+This repository contains Bruno Helmeczy's 1st Assignment for the Data Analysis 2 - Regressions & Coding 1 - Data Analysis & Management with R courses at the Central European Universitys' MSc in Business Analytics curriculum. 
+
+URL to this Repository on GitHub: https://github.com/BrunoHelmeczy/CEU_DA2_Assignment_1
+
+The assignment investigated the pattern of association between registered covid-19 cases and registered number of deaths due to covid-19 across countries, as of 20th October, 2020. The repository contains the following:
 
 ### Data folder: 
 **Raw data set** 
@@ -15,13 +19,12 @@ This repository contains Bruno Helmeczy's 1st Assignment for the Data Analysis 2
 
 ### Codes folder:
 The codes folder includes the following:
-- **covid_get_data.R:** this is the R script that collects all the data used in this analysis.
-- **covid_clean_data.R:** this is the R script that contains the steps of cleaning the data set before doing analysis.
-- **covid_analysis_data.R:** this is the R script with all the analysis part of this project.
-- **covid_analysis_data.Rmd:** same as covid_analysis _data.R but in .Rmd. You should be able to replicate my results by running this Rmd file.
+- **Download_raw_Covid_n_Pop_data.R:** this is the R script that collects all the data used in this analysis.
+- **Clean_n_Merge_Covid_n_Pop_data.R:** this is the R script that contains the steps of cleaning the data set before doing analysis.
+- **Analysis_Covid_n_Pop_data.R:** this is the R script with all the analysis part of this project.
+- **DA2_Assignment1_Report.Rmd:** same as covid_analysis _data.R but in .Rmd. You should be able to replicate my results by running this Rmd file.
 
-Joint_Assignment_COVID.Rproj: Project file is also included so you should be able to open all the R scripts and Rmd file in this project.
+### Docs folder: 
+- **.html** & **.pdf** reports - generated from **DA2_Assignment1_Report.Rmd**.
 
-Docs folder: it contains both .html and .pdf generated from .rmd.
 
-Output folder: in this folder, you can find the code generated model summary statistics table in the html format, and also a screenshot of the html result.
