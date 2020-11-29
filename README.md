@@ -19,10 +19,10 @@ The assignment investigated the pattern of association between registered covid-
 
 ### Codes folder:
 The codes folder includes the following:
-- **Download_raw_Covid_n_Pop_data.R:** this is the R script that collects all the data used in this analysis.
-- **Clean_n_Merge_Covid_n_Pop_data.R:** this is the R script that contains the steps of cleaning the data set before doing analysis.
-- **Analysis_Covid_n_Pop_data.R:** this is the R script with all the analysis part of this project.
-- **DA2_Assignment1_Report.Rmd:** same as covid_analysis _data.R but in .Rmd. You should be able to replicate my results by running this Rmd file.
+- **Download_raw_Covid_n_Pop_data.R:** R script to collect all data used for analysis.
+- **Clean_n_Merge_Covid_n_Pop_data.R:** R script to clean data set pre-analysis.
+- **Analysis_Covid_n_Pop_data.R:** R script 1st sketch of all analysis used in this project.
+- **DA2_Assignment1_Report.Rmd:** Finalized analysis structure of project with added text interpretation. Analysis results & reports are fully replicable with this Rmd file.
 
 ### Documents folder: 
 - **.html** & **.pdf** reports - generated from **DA2_Assignment1_Report.Rmd**.
