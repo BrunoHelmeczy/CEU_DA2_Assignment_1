@@ -7,14 +7,17 @@ The assignment investigated the pattern of association between registered covid-
 The repository contains the following:
 
 #### Data folder: 
-The raw data set is obtained from: https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data, originating from the 2019 Novel Coronavirus Visual Dashboard, operated by Johns Hopkins Universitys' Centre for Systems Science and Engineering (JHU CSSE). Listed countries' populations (as of 2019) are also included in the cleaned data set, downloaded from the World Banks'- World Development Indicators, & available at: https://data.worldbank.org/indicator/SP.POP.TOTL. 
+**Raw data set** 
+- Covid-19 data is obtained from: https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data, originating from Johns Hopkins Universitys' Centre for Systems Science and Engineering (JHU CSSE) 2019 Novel Coronavirus Visual Dashboard.
+- Listed countries' populations (as of 2019) are also included in this analysis, downloaded from the World Banks'- World Development Indicators, & available at: https://data.worldbank.org/indicator/SP.POP.TOTL. 
 
-The cleaned data set contains countries covid19 reports as of 20th October, 2020, including confirmed-,  death-, recovered-, & active cases from 182 listed countries.
-Confirmed- & Death cases also include probable cases, if such data is reported in a country. Active cases are calculated as the total confirmed cases minus deaths, minus recovered cases. Covid-19 related figures were all scaled by 1.000, while countries' population figures were scaled by 1.000.000.
+**Cleaned data set** contains countries covid19 reports as of 20th October, 2020, including confirmed-, death-, recovered-, & active cases from 182 listed countries.
+- Confirmed- & Death cases also include probable cases, if such data is reported in a country. 
+- Active cases are calculated as the total confirmed cases minus deaths, minus recovered cases. 
+- Covid-19 related figures were all scaled by 1.000, while countries' population figures were scaled by 1.000.000.
 
 #### Codes folder:
 The codes folder includes the following:
-
 - **covid_get_data.R:** this is the R script that collects all the data used in this analysis.
 - **covid_clean_data.R:** this is the R script that contains the steps of cleaning the data set before doing analysis.
 - **covid_analysis_data.R:** this is the R script with all the analysis part of this project.
