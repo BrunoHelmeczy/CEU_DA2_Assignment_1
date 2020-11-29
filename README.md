@@ -1,22 +1,19 @@
-### CEU_DA2_Assignment_1
+## CEU_DA2_Assignment_1
 
-This repository contains Bruno Helmeczy's 1st Assignment for the Data Analysis 2 - Regressions & Coding 1 - Data Analysis & Management with R courses at the Central European Universitys' MSc in Business Analytics curriculum.
+This repository contains Bruno Helmeczy's 1st Assignment for the Data Analysis 2 - Regressions & Coding 1 - Data Analysis & Management with R courses at the Central European Universitys' MSc in Business Analytics curriculum. The assignment investigated the pattern of association between registered covid-19 cases and registered number of deaths due to covid-19 across countries, as of 20th October, 2020. The repository contains the following:
 
-The assignment investigated the pattern of association between registered covid-19 cases and registered number of deaths due to covid-19 across countries, as of 20th October, 2020.
-
-The repository contains the following:
-
-#### Data folder: 
+### Data folder: 
 **Raw data set** 
 - Covid-19 data is obtained from: https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data, originating from Johns Hopkins Universitys' Centre for Systems Science and Engineering (JHU CSSE) 2019 Novel Coronavirus Visual Dashboard.
 - Listed countries' populations (as of 2019) are also included in this analysis, downloaded from the World Banks'- World Development Indicators, & available at: https://data.worldbank.org/indicator/SP.POP.TOTL. 
 
-**Cleaned data set** contains countries covid19 reports as of 20th October, 2020, including confirmed-, death-, recovered-, & active cases from 182 listed countries.
+**Cleaned data set** 
+- Contains countries' Covid-19 figures as of 20th October, 2020, including confirmed-, death-, recovered-, & active cases from 182 listed countries.
 - Confirmed- & Death cases also include probable cases, if such data is reported in a country. 
 - Active cases are calculated as the total confirmed cases minus deaths, minus recovered cases. 
 - Covid-19 related figures were all scaled by 1.000, while countries' population figures were scaled by 1.000.000.
 
-#### Codes folder:
+### Codes folder:
 The codes folder includes the following:
 - **covid_get_data.R:** this is the R script that collects all the data used in this analysis.
 - **covid_clean_data.R:** this is the R script that contains the steps of cleaning the data set before doing analysis.
