@@ -72,6 +72,99 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -109,7 +202,7 @@ code span.ot { color: #007020; }
 <div id="executive-summary" class="section level2">
 <h2>Executive Summary</h2>
 <p>This report analyses the pattern of association between confirmed Covid-19 cases, and the respective number of Covid-19 related deaths countries experienced, as of 20th October, 2020. Visual inspection (available in the appendices) highlighted a log-log linear association pattern between deaths and confirmed cases, leading to estimation and comparison of 4 log-log linear regression models.</p>
-<p>The log-log population-weighted linear regression model was chosen, boasting statistically significant regression parameters, and an adjusted R-squared value of 92.9%. According to this model, people observing 10% larger number of confirmed cases in a country, on average can expect to observe 9.5% larger number of deaths. The core message is two-fold: 1st, the association pattern is close to 1 for all tested models, where 1 implies a constant ratio between case &amp; death figures i.e. virus deadliness, and 2nd the 0.05 deviation in the slope parameter, points to how other factors could also be useful in predicting covid-19 related deaths.</p>
+<p>The log-log population-weighted linear regression model was chosen, boasting statistically significant regression parameters, and explaining 92.9% of variation in Covid-19 related deaths among countries with variation in confirmed Covid-19 cases (adjusted R-squared). According to this model, people observing 10% larger number of confirmed cases in a country, on average can expect to observe 9.5% larger number of deaths. The core message is two-fold: 1st, the association pattern is close to 1 for all tested models, where 1 implies a constant ratio between case &amp; death figures i.e. virus deadliness, and 2nd the 0.05 deviation in the slope parameter, points to how other factors could also be useful in predicting covid-19 related deaths.</p>
 <p>Indeed, age and health were shown to influence covid-19 infected individuals’ probability of dying, therefore including such demographic variables at the national level could improve the chosen models’ predictive power. On the other hand, some national governments may choose to “massage” statistics to avoid losing face, which if proven, undermines the validity of results &amp; conclusions derived in this report.</p>
 <div id="introduction" class="section level4">
 <h4>1) Introduction:</h4>
@@ -183,7 +276,7 @@ code span.ot { color: #007020; }
 </tr>
 </tbody>
 </table>
-<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
 <p>Though the intercept (alpha) parameter is not meaningfully interpretable with a log-log regression model, its slope (beta) parameter tells, that for people across all countries, a +10 percent change in confirmed Covid-19 cases is associated with +9.5 percent change in Covid-19 related deaths, on average. That is 0.8 percent less than the simple log-log linear regression model slope, highlighting that smaller countries experience disproportionately low number of deaths relative to their case numbers, which if not weighed, gives the perception that death figures’ growth rate is larger than case numbers’.</p>
 </div>
 <div id="beta-parameter-hypothesis-test" class="section level4">
@@ -229,7 +322,7 @@ code span.ot { color: #007020; }
 </div>
 <div id="residual-analysis" class="section level4">
 <h4>7) Residual Analysis:</h4>
-<p>Best countries were defined as those with largest negative residuals versus respective model-predicted values, while on the flip side, Worst countries as those with largest positive residuals versus model predicted values. If one accepts countries’ deviations from residuals as representative of the job quality respective nations’ governments performed in pandemic management thus far, the Singaporean leadership qualifies 1st worldwide, despite being the most densely populated nation, which is supposed to influence its’ pandemic management very negatively.</p>
+<p>Best countries were defined as those with largest negative residuals versus respective model-predicted values, while on the flip side, Worst countries as those with largest positive residuals versus model predicted values. If one accepts countries’ deviations from residuals as a measure of job quality nations’ governments have performed in pandemic management thus far, the Singaporean leadership qualifies 1st worldwide, despite being the most densely populated nation, which is supposed to influence its’ pandemic management very negatively.</p>
 <table>
 <thead>
 <tr class="header">
@@ -319,7 +412,7 @@ code span.ot { color: #007020; }
 <p>The 2 models however, differ in their interpretation significantly. The simple log-log regression outputs show how much percentage more deaths can a country expect on average, give how much percentage more confirmed cases it has country to country, as opposed to the population weighted regression outputs showing how much percentage more deaths can people expect on average, given how much percentage more confirmed cases there are.</p>
 <p>Substantively, this makes a significant difference due to the data quality issues outline in the introduction. Firstly, the complexity associated with managing the pandemic at a national level is different depending on country size, thus smaller countries’ leaders arguably have an easier job managing infection rates once the virus is identified, as they are faster able to implement directives versus significantly larger countries. Thus it can be expected smaller countries are better able to minimize the number of deaths relative to the number of cases observed, skewing the true association pattern.</p>
 <p>Secondly, the percentage difference between measured- and true virus-related figures is greater in smaller countries, and weighing smaller-country observations equally to large ones (e.g. Liechtenstein versus China) exposes the model to measurement errors in smaller countries. For these reasons, despite their parameters’ sampling distributions overlapping, my chosen model is the population weighted log-log regression model.</p>
-<table class="huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:unnamed-chunk-11">
+<table class="huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:unnamed-chunk-10">
 <col><col><col><col><col><tr>
 <th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Ln_Deaths</th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Ln_Deaths</th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Ln_Deaths</th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Ln_Deaths - Weighted</th></tr>
 <tr>
@@ -366,6 +459,15 @@ code span.ot { color: #007020; }
 <th colspan="5" style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> *** p &lt; 0.001;  ** p &lt; 0.01;  * p &lt; 0.05.</th></tr>
 </table>
 
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(rmarkdown)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#render(&#39;C:/Users/helme/Desktop/CEU/FALL_TERM/Data_Analysis/DA2/CEU_DA2_Assignment_1/2_Submit_Folder/Codes/DA2_Assignment1_Report.Rmd&#39;,</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a> <span class="co">#      output_file =  &#39;DA2_Assignment1_Report.html&#39;,</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="co">#     output_dir = &#39;C:/Users/helme/Desktop/CEU/FALL_TERM/Data_Analysis/DA2/CEU_DA2_Assignment_1/2_Submit_Folder/Documents&#39;)</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#render(&#39;C:/Users/helme/Desktop/CEU/FALL_TERM/Data_Analysis/DA2/CEU_DA2_Assignment_1/2_Submit_Folder/Codes/DA2_Assignment1_Report.Rmd&#39;,</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a> <span class="co">#      output_file =  &#39;DA2_Assignment1_Report.pdf&#39;,</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="co">#     output_dir = &#39;C:/Users/helme/Desktop/CEU/FALL_TERM/Data_Analysis/DA2/CEU_DA2_Assignment_1/2_Submit_Folder/Documents&#39;)</span></span></code></pre></div>
 </div>
 </div>
 </section>
