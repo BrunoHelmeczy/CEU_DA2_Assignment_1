@@ -15,7 +15,6 @@ This repository folder contains 3 R-Scripts, together with the final Assignment 
  - Write into csv file (available under Data/Clean sub-folder)
  
 **3) Analysis_Covid_n_Pop_data.R**
-  - Load csv file from Data/Clean sub-folder
   - Summarize Population, Cases, & Deaths statistics & visualize histograms 
   - Investigate Cases' & Deaths' associative pattern with scatter-plots under combinations of logarithmic tranformations
   - Conclude Log-Log assocation is best candidate & remove countries without deaths
