@@ -18,7 +18,7 @@ This repository folder contains 3 R-Scripts, together with the final Assignment 
   - Summarize Population, Cases, & Deaths statistics & visualize histograms 
   - Investigate Cases' & Deaths' associative pattern with scatter-plots under combinations of logarithmic tranformations
   - Conclude Log-Log assocation is best candidate & remove countries without deaths
-  - Model & Visualize association pattern in Log-Log form, using Linear, Quadratic, Piecewise Linear Spline, & Population Weighted Linear function forms
+  - Model & Visualize association pattern in Log-Log form, using Linear-, Quadratic-, Piecewise Linear Spline-, & Population Weighted Linear function forms
   - Test whether Population Weighted Linear models' Slope parameter is Zero
   - Analyze countries with 5 largest positive / negative residuals relative to chosen Population Weighted Linear model
 
