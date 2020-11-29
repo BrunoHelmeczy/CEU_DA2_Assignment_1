@@ -267,7 +267,7 @@ exptbl <- export_summs(reg1, reg2,reg3,reg4,
                                        "Ln_Deaths"))
 
 
-
+View(exptbl)
 
 
 ######
@@ -289,6 +289,17 @@ paste0("ln(Death) = ",round(as.numeric(reg4$coefficients[1]),2)
 reg4$coefficients[2]
 
 names(reg4$coefficients[2])
+
+
+#################################
+#### HYPOTHESIS TESTING ####
+
+# 1) Coefficient is equal to 0:
+# Implemented by default...
+summary( reg4 )
+round(as.data.frame(summary( reg4 )[[12]]),4)
+
+
 
 ######
 # Residual analysis.
@@ -334,18 +345,5 @@ rank(df$reg4_res)
 
 cbind(best, worst)
 
-
-#################################
-#### HYPOTHESIS TESTING ####
-
-# 1) Coefficient is equal to 0:
-# Implemented by default...
-summary( reg4 )
-round(as.data.frame(summary( reg4 )[[12]]),4)
-
-
-
-
-pnorm(5.4,0,1)
 
 

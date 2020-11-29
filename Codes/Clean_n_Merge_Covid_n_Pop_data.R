@@ -13,8 +13,8 @@ library(tidyverse)
 
 
 # Read Raw Files
-CovidCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/2_Submit_Folder/Data/Raw/Covid_10_20_2020_raw.csv"
-PopCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/2_Submit_Folder/Data/Raw/Population_10_20_2020_raw.csv"
+CovidCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/Data/Raw/Covid_10_20_2020_raw.csv"
+PopCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/Data/Raw/Population_10_20_2020_raw.csv"
 
 # Covid
   Covid_raw <- read.csv(CovidCSV)
@@ -45,7 +45,7 @@ PopCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/
   View(Covid_raw_grouped)
 #### Clean WDI population data ####
       ## Check the observations:
-  
+  View(Pop_raw)  
 # 1) Filter out grouping observations based on using digits
   Pop_raw <- Pop_raw %>% filter( !grepl("[[:digit:]]", Pop_raw$iso2c)  )
 View(Pop_raw)
@@ -131,9 +131,7 @@ df <- full_join(Covid_raw_grouped,Pop_raw, by = c("Country" = "Country"))
   df <- df %>% filter( !( is.na( Population ) | is.na( Confirmed ) | is.na( Death ) ))
 
   
-# Add 1 to Death / Recovered / Active to enable log transformations
-    # Deaths: 12x 0s / Recovered: 3x 0s / Active: 2x 0s
-  df <- df %>% transmute( Country     = Country,
+df <- df %>% transmute( Country     = Country,
                           Confirmed   = Confirmed/1000,
                           Death       = (Death)/1000,
                           Recovered   = (Recovered)/1000,
@@ -144,7 +142,5 @@ df <- full_join(Covid_raw_grouped,Pop_raw, by = c("Country" = "Country"))
   View(df)  
 # Save clean data
 getwd()
-setwd("C:/Users/helme/Desktop/CEU/FALL_TERM/Data_Analysis/DA2/CEU_DA2_Assignment_1/2_Submit_Folder")
+setwd("C:/Users/helme/Desktop/CEU/FALL_TERM/Data_Analysis/DA2/CEU_DA2_Assignment_1/")
 write.csv( df , 'Data/Clean/covid_pop_10_20_2020_clean.csv')
-  
-  

@@ -23,18 +23,32 @@ Indeed, age and health were shown to influence covid-19 infected individuals’ 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(scales))    install.packages("scales", repos = "http://cran.us.r-project.org")
+if(!require(moments))   install.packages("moments", repos = "http://cran.us.r-project.org")
+if(!require(lspline))   install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(estimatr))  install.packages("moments", repos = "http://cran.us.r-project.org")
+if(!require(ggthemes))  install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(knitr))     install.packages("moments", repos = "http://cran.us.r-project.org")
+if(!require(gridExtra)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(jtools))   install.packages("moments", repos = "http://cran.us.r-project.org")
+if(!require(huxtable)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+
+
   library(tidyverse)
   require(scales)         # For scaling ggplots
-  library(moments)
+  library(moments)        # Calculating variables' skewness
   library(lspline)        # To Estimate piece-wise linear splines
   library(estimatr)       # Estimate robust SE
-  library(texreg)         # Compare models with robust SE
   library(ggthemes)       # For different themes
-  library(knitr)
-  library(gridExtra)
+  library(knitr)          
+  library(gridExtra)      # arrange compact descriptive tables
+  library(jtools)         # Obtain model statistics table
+  library(huxtable)       # Obtain model statistics table
+
 
 # Read Cleaned Data file from GitHub
-  CovidCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/2_Submit_Folder/Data/Clean/covid_pop_10_20_2020_clean.csv"
+  CovidCSV <- "https://raw.githubusercontent.com/BrunoHelmeczy/CEU_DA2_Assignment_1/main/Data/Clean/covid_pop_10_20_2020_clean.csv"
   df <- read_csv(CovidCSV)
   df <- df %>% select( -X1)
 
@@ -360,10 +374,6 @@ Though the intercept (alpha) parameter is not meaningfully interpretable with a 
 The 1st necessity to establish any meaningful pattern association between the number of confirmed cases and deaths, is testing whether beta, the slope parameter is equal to zero. Thus, the null-hypothesis is Beta = 0, the alternative hypothesis being Beta not being equal to zero. The chosen significance level is 0.1%, due to the realistic need for leaders to be absolutely sure of such an association for decision-making, meaning the maximum accepted probability of a false-positive is 0.001. For the test to satisfy this requirement, the t-statistic must be at least 3.1 distance from 0. 
 
 ```{r, message = F, warning = F, echo = F, fig.align='center', fig.height=3, fig.width= 5}
-library(jtools)
-library(huxtable)
-library(car)
-library(knitr)
 ModelStats <- round(as.data.frame( summary( reg4 )[[12]]),4)
 
 ModelStats %>% kable()
@@ -450,27 +460,6 @@ grid.arrange(Reg1Plot, Reg2Plot, Reg3Plot,Reg4Plot, ncol = 2)
 
 ```
 
-
-
-
-
-```{r, message = F, warning = F, echo = F,size=1, fig.height= 4, fig.align='center'}
-# Model Summary Statistics #
-
-exptbl <- export_summs(reg1, reg2,reg3,reg4,
-                       model.names = c("Ln_Deaths",
-                                       "Ln_Deaths",
-                                       "Ln_Deaths",
-                                       "Ln_Deaths - Weighted"),
-                       to.file = "html",
-                       file.name = paste0(getwd(),"/","modeltable.html"))
-Exptbl_chosen <- export_summs(reg4,
-                       model.names = "Ln_Deaths - Weighted")
-
-
-```
-
-
 ## 4) Model Selection & Statistical Summaries
 Based on scatter-plot visuals, both variables of interest were log-transformed, from which 4 regression models were estimated: 1st a Log-Log Linear Regression, 2nd a Log-Log 2nd degree Polynomial regression, 3rd a Log-Log Piecewise Linear Spline Regression, and 4th a Log-Log Weighted linear Regression, weighed by countries’ respective populations. Using log-log models, their interpretations are “a certain percentage change in Confirmed Cases being associated with a certain percentage change in Deaths”. Overall, the 4 models perform well, each explaining at least 89% of variation in percentage change in Deaths, by the percentage change in Confirmed cases, while producing statistically significant parameters. The population weighed log-log regression stands out however, explaining 93% of variation in the outcome variable with variation in the explanatory variable. This model however, produced wider standard errors, causing its’ parameters’ sampling distributions to overlap with model 1, the log-log linear regression, both in case of the intercept and slope parameter. Hypothesis tests therefore, would not be able to reject with 95% confidence the hypothesis that these models are statistically the same.
 
@@ -481,11 +470,17 @@ Substantively, this makes a significant difference due to the data quality issue
 Secondly, the percentage difference between measured- and true virus-related figures is greater in smaller countries, and weighing smaller-country observations equally to large ones (e.g. Liechtenstein versus China) exposes the model to measurement errors in smaller countries. For these reasons, despite their parameters’ sampling distributions overlapping, my chosen model is the population weighted log-log regression model.
 
 
-```{r, message=F,warning=F, echo = F}
+```{r, message = F, warning = F, echo = F,size=1, fig.height= 4, fig.align='center'}
+# Model Summary Statistics #
+
+exptbl <- export_summs(reg1, reg2,reg3,reg4,
+                       model.names = c("Ln_Deaths",
+                                       "Ln_Deaths",
+                                       "Ln_Deaths",
+                                       "Ln_Deaths - Weighted"))
+
 as_hux(exptbl)
-
 ```
-
 
 
 
